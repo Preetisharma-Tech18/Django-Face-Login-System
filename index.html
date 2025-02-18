@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face-Recognition System</title>
+    <style>
+    
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container Styling */
+.register-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+}
+
+/* Heading */
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form Input */
+input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Camera Container */
+.camera-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+video {
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid black;;
+}
+
+canvas {
+    display: none;
+}
+
+/* Buttons */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Capture Button */
+#capture-button {
+    background-color: #28a745;
+    margin-top: 10px;
+}
+
+#capture-button:hover {
+    background-color: #218838;
+}
+
+/* Message */
+#message {
+    margin-top: 10px;
+    color: red;
+    font-size: 14px;
+}
+
+</style>
+</head>
+<body>
+    
+    <div class="register-container">
+        <h2>Register with Face Recognition</h2>
+        <form id="register-form">
+        <input type="text" name="username" id="username" placeholder="username" required>
+
+        <div class="camera-container">
+            <video id = "video" width="100%" height="auto" autoplay></video>
+            <button type="button" id="capture-button">Capture Face</button>
+            <canvas id="canvas" width="300" height="200"></canvas>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    <div id="message"></div>
+    </div>
+
+  <!------------------------------Script ---------------------->
+
+<script>
+   
+     const video= document.getElementById('video')
+     const canvas= document.getElementById('canvas')
+     const captureButton = document.getElementById('capture-button')
+     const registerForm =  document.getElementById('register-form')
+     const messageDiv = document.getElementById('message')
+
+     let captureImage = null
+
+    //this is API to access Video //
+     navigator.mediaDevices.getUserMedia({video:true,audio:true})
+     .then ((stream)=>{
+          video.srcObject = stream
+     }).catch((err)=>{
+        console.log("Error While accessing your camera")
+        messageDiv.innerHTML = "Camera not accessible"
+     })
+
+     captureButton.addEventListener('click',()=>{
+    if(!video.srcObject){
+        messageDiv.innerHTML = "Please allow access to your Camera"
+        return
+    }
+     const context = canvas.getContext("2d")
+     context.drawImage(video,0,0,canvas.width,canvas.height)
+     CapturedImage = canvas.toDataURL('image/jpeg')
+     messageDiv.innerHTML = "Face Captured Successfully"
+     })
+    
+</script>
+</body>
+</html>
